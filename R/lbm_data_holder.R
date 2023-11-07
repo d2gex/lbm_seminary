@@ -22,7 +22,7 @@ BiologyParameters <- R6Class("BiologyParameters", public = list(
 ExplotationParameters <- R6Class("ExplotationParameters", public = list(
   s50 = NULL,
   s95 = NULL,
-  initialize = function(s50, s95) {
+  initialize = function(s50 = NULL, s95 = NULL) {
     self$s50 <- s50
     self$s95 <- s95
   }
