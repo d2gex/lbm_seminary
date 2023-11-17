@@ -34,9 +34,13 @@ ExplotationParameters <- R6Class("ExplotationParameters", public = list(
 
 CatchWeightMatrices <- R6Class("CatchWeightMatrices", public = list(
   catch = NULL,
+  catch_long = NULL,
   weight = NULL,
-  initialize = function(catch, weight) {
+  weight_long = NULL,
+  initialize = function(catch, catch_long, weight, weight_long) {
     self$catch <- catch
+    self$catch_long <- catch_long
     self$weight <- weight
+    self$weight_long <- weight_long
   }
 ))
