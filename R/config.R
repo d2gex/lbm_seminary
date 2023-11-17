@@ -1,5 +1,9 @@
 source("lbm_data_holder.R")
 
+DATA_FOLDER_PATH <- '../data'
+FREQUENCY_DATA_PATH <- file.path(DATA_FOLDER_PATH, 'Diplodus_sargus.xlsx')
+
+
 bio_params <- BiologyParameters$new(
   linf = 48.4,
   k = 0.18,
@@ -12,4 +16,4 @@ bio_params <- BiologyParameters$new(
   lwb = 2.955
 )
 
-exp_params <- ExplotationParameters$new()
+

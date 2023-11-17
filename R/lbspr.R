@@ -5,22 +5,22 @@ source("lbm_method.R")
 
 Lbspr <- R6Class("Lbspr", inherit = Lbm, public = list(
 
-  initialize = function(biology_params, explotation_params, catchweight_data) {
-    super$initialize(biology_params, explotation_params, catchweight_data)
+  initialize = function(biology_params, explotation_params, catch_weight_data) {
+    super$initialize(biology_params, explotation_params, catch_weight_data)
   },
   run = function() {
 
-    lc_matrix <- df_to_unname_matrix(self$catchweight_data$lengths, from_col = 2)
-    lc_matrix_t <- transpose(lc_df)
+    lc_matrix <- df_to_unname_matrix(self$catchweight_data$catch, from_col = 2)
+    lc_matrix_t <- transpose(self$catchweight_data$catch)
     years <- as.integer(rownames(lc_matrix_t))
     mid_points <- as.numeric(colnames(lc_matrix_t))
 
 
     # --> Provide algorithm with expected parameters
     input_params <- new("LB_pars")
-    input_params@Linf <- self$biology_params$Linf
-    input_params@L50 <- self$biology_params$L50
-    input_params@L95 <- self$biology_params$L95
+    input_params@Linf <- self$biology_params$linf
+    input_params@L50 <- self$biology_params$l50
+    input_params@L95 <- self$biology_params$l95
     input_params@MK <- self$biology_params$M_K
     input_params@L_units <- "cm"
     input_params@Walpha <- self$biology_params$lwa
