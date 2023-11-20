@@ -23,8 +23,20 @@ plot_context$x_text_size <- 8
 plot_context$y_text_size <- 8
 plot_context$x_lab <- "Length (cm)"
 plot_context$y_lab <- "Count"
-g <- generate_species_yearly_arte_length_plot(catch_weight_data$catch_long,
-                                              'MeanLength',
-                                              'catch',
-                                              plot_context)
+
+# g <- generate_species_yearly_arte_length_plot(catch_weight_data$catch_long,
+#                                               'MeanLength',
+#                                               'catch',
+#                                               plot_context)
+
+plot_context$title <- "Length frequency distribution for years 2001 and 2021"
+g <- generate_biannual_distribution(catch_weight_data$catch_long,
+                                    'MeanLength',
+                                    'catch',
+                                    plot_context,
+                                    2001,
+                                    2022,
+                                    bar_filled_colours = c("lightblue4", "red"),
+                                    alpha_values = c(.8, .3))
 g
+
