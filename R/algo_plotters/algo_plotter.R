@@ -1,5 +1,6 @@
 library("R6")
 library("tidyverse")
+library("ggpubr")
 
 AlgoOutputPlotter <- R6Class("AlgoOutputPlotter", public = list(
 
@@ -39,6 +40,22 @@ AlgoOutputPlotter <- R6Class("AlgoOutputPlotter", public = list(
       theme(legend.position = "none",
             legend.key.size = unit(1.2, "lines"))
     return(g)
+  },
+  build_parallell_plots = function(plot_a, plot_b, title, size, just) {
+    title <- as_ggplot(text_grob(title, size = size, just = just))
+    algo_outputs <-
+      ggarrange(
+        plotlist = list(plot_a, plot_b),
+        ncol = 2,
+        nrow = 1
+      )
+    outer_grid <- ggarrange(
+      plotlist = list(title, algo_outputs),
+      ncol = 1,
+      nrow = 2,
+      heights = c(1, 10)
+    )
+    return(outer_grid)
   }
 ))
 

@@ -19,7 +19,8 @@ data$years <- results$years
 lbspr_plotter <- LbsprOutputPlotter$new(data, bio_params$M)
 spr_g <- lbspr_plotter$build_spr_plot(d_colour = "steelblue")
 fm_g <- lbspr_plotter$build_fm_plot(d_colour = "steelblue")
-fm_g
+grid <- lbspr_plotter$build_parallell_plots(spr_g, fm_g, "SPR and F/M estimates for LBSPR", size = 15, just = 'centre')
+grid
 
 
 
