@@ -36,7 +36,7 @@ Lbspr <- R6Class("Lbspr", inherit = Lbm, public = list(
 
     # --> Run the algorithm
     ret <- LBSPRfit(LB_pars = input_params, LB_lengths = LB_lengths, verbose = TRUE)
-    return (list(
+    return(list(
       years = ret@Years,
       results = ret@Ests
     ))
