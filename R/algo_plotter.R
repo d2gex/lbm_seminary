@@ -6,10 +6,8 @@ source("utils.R")
 AlgoOutputPlotter <- R6Class("AlgoOutputPlotter", public = list(
 
   data = NULL,
-  M = NULL,
-  initialize = function(data, M) {
+  initialize = function(data) {
     self$data <- data
-    self$M <- M
   },
   build_spr_plot = function(d_colour) {
     years_midpoint <- self$data$years[length(self$data$years) / 2]
@@ -62,8 +60,8 @@ AlgoOutputPlotter <- R6Class("AlgoOutputPlotter", public = list(
 
 LbsprOutputPlotter <- R6Class("LbsprOutputPlotter", inherit = AlgoOutputPlotter, public = list(
 
-  initialize = function(data, M) {
-    super$initialize(data, M)
+  initialize = function(data) {
+    super$initialize(data)
   },
   build_fm_plot = function(d_colour) {
     g <- self$data %>%
@@ -84,8 +82,8 @@ LbsprOutputPlotter <- R6Class("LbsprOutputPlotter", inherit = AlgoOutputPlotter,
 
 LimeOutputPlotter <- R6Class("LimeOutputPlotter", inherit = AlgoOutputPlotter, public = list(
 
-  initialize = function(data, M) {
-    super$initialize(data, M)
+  initialize = function(data) {
+    super$initialize(data)
   },
   build_score = function(d_colour, column) {
     g <- self$data %>%
@@ -106,8 +104,8 @@ LimeOutputPlotter <- R6Class("LimeOutputPlotter", inherit = AlgoOutputPlotter, p
 
 LbiOutputPlotter <- R6Class("LbiOutputPlotter", inherit = AlgoOutputPlotter, public = list(
 
-  initialize = function(data, M) {
-    super$initialize(data, M)
+  initialize = function(data) {
+    super$initialize(data)
   },
   build_lbi_tower = function(grid_title, thresholds) {
     plots <- private$build_all_lbi_plots(self$data, thresholds)

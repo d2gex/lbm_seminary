@@ -5,7 +5,7 @@ source("lbm_data_holder.R")
 source("lbspr.R")
 source("lime.R")
 source("lbi.R")
-source("algo_plotters/algo_plotter.R")
+source("algo_plotter.R")
 
 diplodus_data <- read_sheets_from_excel(FREQUENCY_DATA_PATH)
 catch_weight_data <- CatchWeightMatrices$new(catch = diplodus_data$catch,
@@ -50,8 +50,9 @@ thresholds <- list(
   Pmega = 0.3,
   Lmean_Lopt = 0.9,
   Lmean_Lfem = 1)
-lbi_plotter <- LbiOutputPlotter$new(data, bio_params$M)
+lbi_plotter <- LbiOutputPlotter$new(data)
 grid <- lbi_plotter$build_lbi_tower("Lbi scores", thresholds)
+grid
 
 
 # # Draw length-frequency distribution
