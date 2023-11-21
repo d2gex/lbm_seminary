@@ -13,12 +13,12 @@ catch_weight_data <- CatchWeightMatrices$new(catch = diplodus_data$catch,
                                              weight = diplodus_data$weight,
                                              weight_long = diplodus_data$weight_long)
 
-lbspr_algo <- Lbspr$new(bio_params, exp_params, catch_weight_data)
-lbspr_results <- lbspr_algo$run()
-exp_params$s50 <- mean(lbspr_results$estimates$SL50)
-exp_params$s95 <- mean(lbspr_results$estimates$SL95)
-lime_algo <- Lime$new(bio_params, exp_params, catch_weight_data)
-lime_results <- lime_algo$run()
+# lbspr_algo <- Lbspr$new(bio_params, exp_params, catch_weight_data)
+# lbspr_results <- lbspr_algo$run()
+# exp_params$s50 <- mean(lbspr_results$estimates$SL50)
+# exp_params$s95 <- mean(lbspr_results$estimates$SL95)
+# lime_algo <- Lime$new(bio_params, exp_params, catch_weight_data)
+# lime_results <- lime_algo$run()
 lbi_algo <- Lbi$new(bio_params, exp_params, catch_weight_data)
 lbi_results <- lbi_algo$run()
 
@@ -31,15 +31,27 @@ lbi_results <- lbi_algo$run()
 # grid <- lbspr_plotter$build_parallell_plots(list(spr_g, fm_g), "SPR and F/M estimates for LBSPR", size = 15, just = 'centre')
 # grid
 
-data <- lime_results$estimates
-data$years <- lime_results$years
-lime_plotter <- LimeOutputPlotter$new(data, bio_params$M)
-spr_g <- lime_plotter$build_spr_plot(d_colour = "steelblue")
-f_g <- lime_plotter$build_score(d_colour = "steelblue", 'F')
-r_g <- lime_plotter$build_score(d_colour = "steelblue", 'Recruitment')
-grid <- lime_plotter$build_parallell_plots(list(spr_g, f_g, r_g), "SPR, F and Recruitment estimates for LIME", size = 15, just = 'centre')
-grid
+# data <- lime_results$estimates
+# data$years <- lime_results$years
+# lime_plotter <- LimeOutputPlotter$new(data, bio_params$M)
+# spr_g <- lime_plotter$build_spr_plot(d_colour = "steelblue")
+# f_g <- lime_plotter$build_score(d_colour = "steelblue", 'F')
+# r_g <- lime_plotter$build_score(d_colour = "steelblue", 'Recruitment')
+# grid <- lime_plotter$build_parallell_plots(list(spr_g, f_g, r_g), "SPR, F and Recruitment estimates for LIME", size = 15, just = 'centre')
+# grid
 
+
+data <- lbi_results$estimates
+data$years <- lbi_results$years
+thresholds <- list(
+  Lc_Lmat = 1,
+  L25_Lmat = 1,
+  Lmax5_Linf = 0.8,
+  Pmega = 0.3,
+  Lmean_Lopt = 0.9,
+  Lmean_Lfem = 1)
+lbi_plotter <- LbiOutputPlotter$new(data, bio_params$M)
+grid <- lbi_plotter$build_lbi_tower("Lbi scores", thresholds)
 
 
 # # Draw length-frequency distribution

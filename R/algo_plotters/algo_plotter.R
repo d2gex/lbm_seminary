@@ -1,6 +1,7 @@
 library("R6")
 library("tidyverse")
 library("ggpubr")
+source("utils.R")
 
 AlgoOutputPlotter <- R6Class("AlgoOutputPlotter", public = list(
 
@@ -99,6 +100,75 @@ LimeOutputPlotter <- R6Class("LimeOutputPlotter", inherit = AlgoOutputPlotter, p
       theme(legend.position = "none",
             legend.key.size = unit(1.2, "lines"))
     return(g)
+  }
+
+))
+
+LbiOutputPlotter <- R6Class("LbiOutputPlotter", inherit = AlgoOutputPlotter, public = list(
+
+  initialize = function(data, M) {
+    super$initialize(data, M)
+  },
+  build_lbi_tower = function(grid_title, thresholds) {
+    plots <- private$build_all_lbi_plots(self$data, thresholds)
+    tower <- ggarrange(plotlist = rev(plots),
+                       ncol = 1,
+                       nrow = length(thresholds))
+    tower_title <- build_grid_title(grid_title, size = 10)
+    return(ggarrange(
+      plotlist = list(tower_title, tower),
+      ncol = 1,
+      nrow = 2,
+      heights = c(0.5, 10)
+    ))
+  }
+), private = list(
+  build_single_lbi_row_plot = function(data, colname, threshold, is_bottom) {
+    g <- ggplot(data, aes(x = factor(years), y = .data[[colname]])) +
+      geom_line(aes(group = 1)) +
+      geom_point(aes(colour = fitness)) +
+      geom_hline(yintercept = threshold, linetype = 'dotted', col = 'green') +
+      scale_color_manual(values = c(yes = "limegreen", no = 'red4')) +
+      theme_bw() +
+      xlab('Years')
+
+    if (is_bottom) {
+      g <- g +
+        theme(
+          axis.text.x = element_text(angle = 45),
+          legend.position = "none"
+        )
+    }
+    else {
+      g <- g +
+        theme(axis.ticks.x = element_blank(),
+              axis.text.x = element_blank(),
+              axis.title.x = element_blank(),
+              legend.position = "none")
+    }
+    return(g)
+  },
+  build_all_lbi_plots = function(data, thresholds) {
+    col_names <- names(data)
+    col_names <- col_names[col_names != 'years']
+    plots <- list()
+    for (i in seq_along(col_names)) {
+      c_name <- col_names[[i]]
+      col_threshold <- thresholds[[c_name]]
+      col_data <- data.frame(years = data$years)
+      col_data[[c_name]] <- data[[c_name]]
+      if (str_detect(c_name, 'Lfem')) {
+        col_data$fitness <- ifelse(col_data[[c_name]] >= col_threshold, 'yes', 'no')
+      }
+      else {
+        col_data$fitness <- ifelse(col_data[[c_name]] > col_threshold, 'yes', 'no')
+      }
+      plots[[i]] <- private$build_single_lbi_row_plot(col_data,
+                                                      c_name,
+                                                      col_threshold,
+                                                      is_bottom = ifelse(i == 1, TRUE, FALSE))
+    }
+    return(plots)
   }
 
 ))

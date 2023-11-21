@@ -86,3 +86,10 @@ df_to_named_matrix <- function(data) {
   rownames(mat) <- data[[1]]
   return(mat)
 }
+
+build_grid_title <- function(title, size = 15, just = "centre") {
+  tgrob <- text_grob(title, size = size, just = just)
+  return(ggarrange(plotlist = list(as_ggplot(tgrob)),
+                   ncol = 1,
+                   nrow = 1))
+}
