@@ -4,6 +4,7 @@ source("plot_utils.R")
 source("lbm_data_holder.R")
 source("lbspr.R")
 source("lime.R")
+source("lbi.R")
 source("algo_plotters/algo_plotter.R")
 
 diplodus_data <- read_sheets_from_excel(FREQUENCY_DATA_PATH)
@@ -18,6 +19,9 @@ exp_params$s50 <- mean(lbspr_results$estimates$SL50)
 exp_params$s95 <- mean(lbspr_results$estimates$SL95)
 lime_algo <- Lime$new(bio_params, exp_params, catch_weight_data)
 lime_results <- lime_algo$run()
+lbi_algo <- Lbi$new(bio_params, exp_params, catch_weight_data)
+lbi_results <- lbi_algo$run()
+
 
 # data <- lbspr_results$estimates
 # data$years <- lbspr_results$years
