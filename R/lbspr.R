@@ -35,10 +35,10 @@ Lbspr <- R6Class("Lbspr", inherit = Lbm, public = list(
     LB_lengths@NYears <- length(years)
 
     # --> Run the algorithm
-    ret <- LBSPRfit(LB_pars = input_params, LB_lengths = LB_lengths, verbose = TRUE)
+    result <- LBSPRfit(LB_pars = input_params, LB_lengths = LB_lengths, verbose = TRUE)
     return(list(
-      years = ret@Years,
-      results = ret@Ests
+      years = result@Years,
+      estimates = as.data.frame(result@Ests)
     ))
   }
 ))

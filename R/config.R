@@ -14,8 +14,14 @@ bio_params <- BiologyParameters$new(
   M = 0.3105,
   M_K = 1.725,
   lwa = 0.021,
-  lwb = 2.955
+  lwb = 2.955,
+  rec_variability_mean = 0.737,
+  rec_variability_sd = 0.353
 )
+
+exp_params <- ExplotationParameters$new()
+exp_params$sigmaF <- 0.2
+
 
 PlotContext <- R6Class("PlotContext", public = list(
   title = NULL,

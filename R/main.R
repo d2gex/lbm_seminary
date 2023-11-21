@@ -3,6 +3,7 @@ source("utils.R")
 source("plot_utils.R")
 source("lbm_data_holder.R")
 source("lbspr.R")
+source("lime.R")
 source("algo_plotters/algo_plotter.R")
 
 diplodus_data <- read_sheets_from_excel(FREQUENCY_DATA_PATH)
@@ -10,19 +11,21 @@ catch_weight_data <- CatchWeightMatrices$new(catch = diplodus_data$catch,
                                              catch_long = diplodus_data$catch_long,
                                              weight = diplodus_data$weight,
                                              weight_long = diplodus_data$weight_long)
-exp_params <- ExplotationParameters$new()
+
 lbspr_algo <- Lbspr$new(bio_params, exp_params, catch_weight_data)
-results <- lbspr_algo$run()
+lbspr_results <- lbspr_algo$run()
+exp_params$s50 <- mean(lbspr_results$estimates$SL50)
+exp_params$s95 <- mean(lbspr_results$estimates$SL95)
+lime_algo <- Lime$new(bio_params, exp_params, catch_weight_data)
+lime_results <- lime_algo$run()
 
-data <- as.data.frame(results$results)
-data$years <- results$years
-lbspr_plotter <- LbsprOutputPlotter$new(data, bio_params$M)
-spr_g <- lbspr_plotter$build_spr_plot(d_colour = "steelblue")
-fm_g <- lbspr_plotter$build_fm_plot(d_colour = "steelblue")
-grid <- lbspr_plotter$build_parallell_plots(spr_g, fm_g, "SPR and F/M estimates for LBSPR", size = 15, just = 'centre')
-grid
-
-
+# data <- as.data.frame(results$results)
+# data$years <- results$years
+# lbspr_plotter <- LbsprOutputPlotter$new(data, bio_params$M)
+# spr_g <- lbspr_plotter$build_spr_plot(d_colour = "steelblue")
+# fm_g <- lbspr_plotter$build_fm_plot(d_colour = "steelblue")
+# grid <- lbspr_plotter$build_parallell_plots(spr_g, fm_g, "SPR and F/M estimates for LBSPR", size = 15, just = 'centre')
+# grid
 
 
 # # Draw length-frequency distribution
