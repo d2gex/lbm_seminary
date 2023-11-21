@@ -47,7 +47,7 @@ Lime <- R6Class("Lime", inherit = Lbm, public = list(
       SL95 = result$Report$S95_f,
       SPR = result$Report$SPR_t,
       F = result$Report$F_t,
-      R = result$Report$R,
+      Recruitment = result$Report$R,
       max_gradient = result$opt$max_gradient,
       hessian = result$Sdreport$pdHess,
       convergence = result$opt$max_gradient <= 0.001 & result$Sdreport$pdHess == TRUE

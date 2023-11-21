@@ -41,13 +41,13 @@ AlgoOutputPlotter <- R6Class("AlgoOutputPlotter", public = list(
             legend.key.size = unit(1.2, "lines"))
     return(g)
   },
-  build_parallell_plots = function(plot_a, plot_b, title, size, just) {
+  build_parallell_plots = function(plots, title, size, just) {
     title <- as_ggplot(text_grob(title, size = size, just = just))
     algo_outputs <-
       ggarrange(
-        plotlist = list(plot_a, plot_b),
+        plotlist = plots,
         ncol = 2,
-        nrow = 1
+        nrow = ifelse(length(plots) <= 2, 1, 2)
       )
     outer_grid <- ggarrange(
       plotlist = list(title, algo_outputs),
@@ -73,6 +73,28 @@ LbsprOutputPlotter <- R6Class("LbsprOutputPlotter", inherit = AlgoOutputPlotter,
       scale_color_manual(values = c(d_colour)) +
       xlab(str_to_title('Years')) +
       ylab("FM") +
+      theme_bw() +
+      theme(legend.position = "none",
+            legend.key.size = unit(1.2, "lines"))
+    return(g)
+  }
+
+))
+
+LimeOutputPlotter <- R6Class("LimeOutputPlotter", inherit = AlgoOutputPlotter, public = list(
+
+  initialize = function(data, M) {
+    super$initialize(data, M)
+  },
+  build_score = function(d_colour, column) {
+    g <- self$data %>%
+      select_at(.vars = c('years', column)) %>%
+      ggplot(aes(x = years, y = .data[[column]])) +
+      geom_point(aes(color = d_colour)) +
+      geom_line(aes(color = d_colour)) +
+      scale_color_manual(values = c(d_colour)) +
+      xlab(str_to_title('Years')) +
+      ylab(column) +
       theme_bw() +
       theme(legend.position = "none",
             legend.key.size = unit(1.2, "lines"))

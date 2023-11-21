@@ -19,13 +19,23 @@ exp_params$s95 <- mean(lbspr_results$estimates$SL95)
 lime_algo <- Lime$new(bio_params, exp_params, catch_weight_data)
 lime_results <- lime_algo$run()
 
-# data <- as.data.frame(results$results)
-# data$years <- results$years
+# data <- lbspr_results$estimates
+# data$years <- lbspr_results$years
 # lbspr_plotter <- LbsprOutputPlotter$new(data, bio_params$M)
 # spr_g <- lbspr_plotter$build_spr_plot(d_colour = "steelblue")
 # fm_g <- lbspr_plotter$build_fm_plot(d_colour = "steelblue")
-# grid <- lbspr_plotter$build_parallell_plots(spr_g, fm_g, "SPR and F/M estimates for LBSPR", size = 15, just = 'centre')
+# grid <- lbspr_plotter$build_parallell_plots(list(spr_g, fm_g), "SPR and F/M estimates for LBSPR", size = 15, just = 'centre')
 # grid
+
+data <- lime_results$estimates
+data$years <- lime_results$years
+lime_plotter <- LimeOutputPlotter$new(data, bio_params$M)
+spr_g <- lime_plotter$build_spr_plot(d_colour = "steelblue")
+f_g <- lime_plotter$build_score(d_colour = "steelblue", 'F')
+r_g <- lime_plotter$build_score(d_colour = "steelblue", 'Recruitment')
+grid <- lime_plotter$build_parallell_plots(list(spr_g, f_g, r_g), "SPR, F and Recruitment estimates for LIME", size = 15, just = 'centre')
+grid
+
 
 
 # # Draw length-frequency distribution
