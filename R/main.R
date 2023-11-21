@@ -13,32 +13,32 @@ catch_weight_data <- CatchWeightMatrices$new(catch = diplodus_data$catch,
                                              weight = diplodus_data$weight,
                                              weight_long = diplodus_data$weight_long)
 
-# lbspr_algo <- Lbspr$new(bio_params, exp_params, catch_weight_data)
-# lbspr_results <- lbspr_algo$run()
-# exp_params$s50 <- mean(lbspr_results$estimates$SL50)
-# exp_params$s95 <- mean(lbspr_results$estimates$SL95)
-# lime_algo <- Lime$new(bio_params, exp_params, catch_weight_data)
-# lime_results <- lime_algo$run()
+lbspr_algo <- Lbspr$new(bio_params, exp_params, catch_weight_data)
+lbspr_results <- lbspr_algo$run()
+exp_params$s50 <- mean(lbspr_results$estimates$SL50)
+exp_params$s95 <- mean(lbspr_results$estimates$SL95)
+lime_algo <- Lime$new(bio_params, exp_params, catch_weight_data)
+lime_results <- lime_algo$run()
 lbi_algo <- Lbi$new(bio_params, exp_params, catch_weight_data)
 lbi_results <- lbi_algo$run()
 
 
-# data <- lbspr_results$estimates
-# data$years <- lbspr_results$years
-# lbspr_plotter <- LbsprOutputPlotter$new(data, bio_params$M)
-# spr_g <- lbspr_plotter$build_spr_plot(d_colour = "steelblue")
-# fm_g <- lbspr_plotter$build_fm_plot(d_colour = "steelblue")
-# grid <- lbspr_plotter$build_parallell_plots(list(spr_g, fm_g), "SPR and F/M estimates for LBSPR", size = 15, just = 'centre')
-# grid
+data <- lbspr_results$estimates
+data$years <- lbspr_results$years
+lbspr_plotter <- LbsprOutputPlotter$new(data, bio_params$M)
+spr_g <- lbspr_plotter$build_spr_plot(d_colour = "steelblue")
+fm_g <- lbspr_plotter$build_fm_plot(d_colour = "steelblue")
+grid <- lbspr_plotter$build_parallell_plots(list(spr_g, fm_g), "SPR and F/M estimates for LBSPR", size = 15, just = 'centre')
+grid
 
-# data <- lime_results$estimates
-# data$years <- lime_results$years
-# lime_plotter <- LimeOutputPlotter$new(data, bio_params$M)
-# spr_g <- lime_plotter$build_spr_plot(d_colour = "steelblue")
-# f_g <- lime_plotter$build_score(d_colour = "steelblue", 'F')
-# r_g <- lime_plotter$build_score(d_colour = "steelblue", 'Recruitment')
-# grid <- lime_plotter$build_parallell_plots(list(spr_g, f_g, r_g), "SPR, F and Recruitment estimates for LIME", size = 15, just = 'centre')
-# grid
+data <- lime_results$estimates
+data$years <- lime_results$years
+lime_plotter <- LimeOutputPlotter$new(data, bio_params$M)
+spr_g <- lime_plotter$build_spr_plot(d_colour = "steelblue")
+f_g <- lime_plotter$build_score(d_colour = "steelblue", 'F')
+r_g <- lime_plotter$build_score(d_colour = "steelblue", 'Recruitment')
+grid <- lime_plotter$build_parallell_plots(list(spr_g, f_g, r_g), "SPR, F and Recruitment estimates for LIME", size = 15, just = 'centre')
+grid
 
 
 data <- lbi_results$estimates
@@ -55,30 +55,30 @@ grid <- lbi_plotter$build_lbi_tower("Lbi scores", thresholds)
 grid
 
 
-# # Draw length-frequency distribution
-# plot_context <- PlotContext$new()
-# plot_context <- PlotContext$new()
-# plot_context$title_size <- 10
-# plot_context$face_text_size <- 2
-# plot_context$x_text_size <- 8
-# plot_context$y_text_size <- 8
-# plot_context$x_lab <- "Length (cm)"
-# plot_context$y_lab <- "Count"
-#
-# g <- generate_species_yearly_arte_length_plot(catch_weight_data$catch_long,
-#                                               'MeanLength',
-#                                               'catch',
-#                                               plot_context)
+# Draw length-frequency distribution
+plot_context <- PlotContext$new()
+plot_context <- PlotContext$new()
+plot_context$title_size <- 10
+plot_context$face_text_size <- 2
+plot_context$x_text_size <- 8
+plot_context$y_text_size <- 8
+plot_context$x_lab <- "Length (cm)"
+plot_context$y_lab <- "Count"
+
+g <- generate_species_yearly_arte_length_plot(catch_weight_data$catch_long,
+                                              'MeanLength',
+                                              'catch',
+                                              plot_context)
 
 
-# plot_context$title <- "Length frequency distribution for years 2001 and 2021"
-# g <- generate_biannual_distribution(catch_weight_data$catch_long,
-#                                     'MeanLength',
-#                                     'catch',
-#                                     plot_context,
-#                                     2001,
-#                                     2022,
-#                                     bar_filled_colours = c("lightblue4", "red"),
-#                                     alpha_values = c(.8, .3))
-# g
+plot_context$title <- "Length frequency distribution for years 2001 and 2021"
+g <- generate_biannual_distribution(catch_weight_data$catch_long,
+                                    'MeanLength',
+                                    'catch',
+                                    plot_context,
+                                    2001,
+                                    2022,
+                                    bar_filled_colours = c("lightblue4", "red"),
+                                    alpha_values = c(.8, .3))
+g
 
