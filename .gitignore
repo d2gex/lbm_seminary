@@ -50,3 +50,4 @@ rsconnect/
 
 data/*
 .idea
+.ipynb_checkpoints
