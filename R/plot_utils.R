@@ -1,4 +1,7 @@
-generate_species_yearly_arte_length_plot <- function(data, x, y, plot_context) {
+library("dplyr")
+library("ggplot2")
+
+generate_yearly_length_distribution <- function(data, x, y, plot_context) {
 
   # Build number of indiduals per year
   year_num_individuals <- data %>%

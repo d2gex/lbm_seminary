@@ -27,31 +27,6 @@ write_sheets_to_excel <- function(df_list, filename, append = FALSE) {
   write.xlsx(df_list, filename)
 }
 
-read_all_csv_from_folder <- function(folder_path) {
-  # @formatter:off
-  #' Adhoc function to read mulitple csv files from a folder
-  # @formatter:on
-  file_paths <- list.files(path = folder_path, pattern = "*.csv")
-  data <- list()
-  for (i in seq_along(file_paths)) {
-    f_name_parts <- str_split_1(file_paths[i], "\\.")
-    data[[f_name_parts[1]]] <- as.data.frame(read_csv_endoding(file.path(folder_path, file_paths[i])))
-  }
-  return(data)
-}
-
-read_all_excel_from_folder <- function(folder_path) {
-  # @formatter:off
-  #' Adhoc function to read mulitple csv files from a folder
-  # @formatter:on
-  file_paths <- list.files(path = folder_path, pattern = "*.xlsx")
-  data <- list()
-  for (i in seq_along(file_paths)) {
-    f_name_parts <- str_split_1(file_paths[i], "\\.")
-    data[[f_name_parts[1]]] <- read_sheets_from_excel(file.path(folder_path, file_paths[i]))
-  }
-  return(data)
-}
 
 transpose <- function(data, row_as_numeric = TRUE, as_matrix = TRUE) {
 
