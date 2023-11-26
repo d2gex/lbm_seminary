@@ -48,6 +48,8 @@ generate_biannual_distribution <- function(data, x, y, plot_context, year_a, yea
     ylab(plot_context$y_lab) +
     theme_bw() +
     theme(axis.text = element_text(size = plot_context$x_text_size),
+          axis.title.x = element_text(size = plot_context$x_title_size),
+          axis.title.y = element_text(size = plot_context$y_title_size),
           axis.title = element_text(size = plot_context$x_text_size, face = "bold"),
           plot.title = element_text(hjust = 0.5, size = plot_context$title_size, face = 'bold'))
   return(g)

@@ -112,7 +112,7 @@ LbiOutputPlotter <- R6Class("LbiOutputPlotter", inherit = AlgoOutputPlotter, pub
     tower <- ggarrange(plotlist = rev(plots),
                        ncol = 1,
                        nrow = length(thresholds))
-    tower_title <- build_grid_title(grid_title, size = 10)
+    tower_title <- build_grid_title(grid_title, size = 22)
     return(ggarrange(
       plotlist = list(tower_title, tower),
       ncol = 1,
@@ -121,19 +121,31 @@ LbiOutputPlotter <- R6Class("LbiOutputPlotter", inherit = AlgoOutputPlotter, pub
     ))
   }
 ), private = list(
+  rename_lbi_y_axis = function(name) {
+    return(switch(name,
+                  'Lc_Lmat' = bquote(L[c] / L[mat]),
+                  'L25_Lmat' = bquote(L['25%'] / L[mat]),
+                  'Lmax5_Linf' = bquote(L['max5%'] / L[inf]),
+                  'Lmean_Lopt' = bquote(L[mean] / L[opt]),
+                  'Lmean_Lfem' = bquote(L[mean] / L[FEM]),
+                  'Pmega' = bquote(P[mega])))
+
+  },
   build_single_lbi_row_plot = function(data, colname, threshold, is_bottom) {
     g <- ggplot(data, aes(x = factor(years), y = .data[[colname]])) +
       geom_line(aes(group = 1)) +
       geom_point(aes(colour = fitness)) +
-      geom_hline(yintercept = threshold, linetype = 'dotted', col = 'green') +
+      geom_hline(yintercept = threshold, linetype = 'dotted', col = 'green', linewidth=1.2) +
       scale_color_manual(values = c(yes = "limegreen", no = 'red4')) +
       theme_bw() +
-      xlab('Years')
+      xlab('Years') +
+      ylab(private$rename_lbi_y_axis(colname))
 
     if (is_bottom) {
       g <- g +
         theme(
-          axis.text.x = element_text(angle = 45),
+          axis.text.x = element_text(angle = 90, size = 15),
+          axis.title.x = element_text(size = 18),
           legend.position = "none"
         )
     }
@@ -144,6 +156,7 @@ LbiOutputPlotter <- R6Class("LbiOutputPlotter", inherit = AlgoOutputPlotter, pub
               axis.title.x = element_blank(),
               legend.position = "none")
     }
+    g <- g + theme(axis.title.y = element_text(size = 18))
     return(g)
   },
   build_all_lbi_plots = function(data, thresholds) {
