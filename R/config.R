@@ -1,6 +1,6 @@
 library("R6")
 
-DATA_FOLDER_PATH <- '../data'
+DATA_FOLDER_PATH <- 'data'
 FREQUENCY_DATA_PATH <- file.path(DATA_FOLDER_PATH, 'Diplodus_sargus.xlsx')
 
 PlotContext <- R6Class("PlotContext", public = list(

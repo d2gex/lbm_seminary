@@ -1,7 +1,7 @@
 library("R6")
 library("tidyverse")
 library("ggpubr")
-source("utils.R")
+source("R/utils.R")
 
 AlgoOutputPlotter <- R6Class("AlgoOutputPlotter", public = list(
 
@@ -135,7 +135,7 @@ LbiOutputPlotter <- R6Class("LbiOutputPlotter", inherit = AlgoOutputPlotter, pub
     g <- ggplot(data, aes(x = factor(years), y = .data[[colname]])) +
       geom_line(aes(group = 1)) +
       geom_point(aes(colour = fitness)) +
-      geom_hline(yintercept = threshold, linetype = 'dotted', col = 'green', linewidth=1.2) +
+      geom_hline(yintercept = threshold, linetype = 'dotted', col = 'green', linewidth = 1.2) +
       scale_color_manual(values = c(yes = "limegreen", no = 'red4')) +
       theme_bw() +
       xlab('Years') +

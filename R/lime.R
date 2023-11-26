@@ -1,7 +1,7 @@
 library("R6")
 library("LIME")
-source("utils.R")
-source("lbm_method.R")
+source("R/utils.R")
+source("R/lbm_method.R")
 
 Lime <- R6Class("Lime", inherit = Lbm, public = list(
 

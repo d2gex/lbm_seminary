@@ -1,7 +1,7 @@
 library("R6")
 library("LBSPR")
-source("utils.R")
-source("lbm_method.R")
+source("R/utils.R")
+source("R/lbm_method.R")
 
 Lbspr <- R6Class("Lbspr", inherit = Lbm, public = list(
 
