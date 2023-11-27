@@ -6,8 +6,10 @@ source("R/utils.R")
 AlgoOutputPlotter <- R6Class("AlgoOutputPlotter", public = list(
 
   data = NULL,
-  initialize = function(data) {
+  thresholds = NULL,
+  initialize = function(data, thresholds = NULL) {
     self$data <- data
+    self$thresholds <- thresholds
   },
   build_spr_plot = function(d_colour) {
     years_midpoint <- self$data$years[length(self$data$years) / 2]
@@ -19,8 +21,8 @@ AlgoOutputPlotter <- R6Class("AlgoOutputPlotter", public = list(
       geom_point(aes(colour = d_colour)) +
       geom_line(aes(colour = d_colour)) +
       scale_color_manual(values = c(d_colour)) +
-      geom_hline(yintercept = 0.3, linetype = 'dashed', col = 'red') +
-      geom_hline(yintercept = 0.4, linetype = 'dotted', col = 'green') +
+      geom_hline(yintercept = 0.3, linetype = 'dashed', col = 'red', linewidth = 1.2) +
+      geom_hline(yintercept = 0.4, linetype = 'dotted', col = 'green', linewidth = 1.2) +
       annotate(geom = "text",
                label = "SPR 30",
                x = years_midpoint,
@@ -37,6 +39,8 @@ AlgoOutputPlotter <- R6Class("AlgoOutputPlotter", public = list(
       ylab("SPR") +
       theme_bw() +
       theme(legend.position = "none",
+            axis.title.x = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
             legend.key.size = unit(1.2, "lines"))
     return(g)
   },
@@ -55,13 +59,14 @@ AlgoOutputPlotter <- R6Class("AlgoOutputPlotter", public = list(
       heights = c(1, 10)
     )
     return(outer_grid)
-  }
+  },
+  generate_outputs = function(title_size, title) { }
 ))
 
 LbsprOutputPlotter <- R6Class("LbsprOutputPlotter", inherit = AlgoOutputPlotter, public = list(
 
-  initialize = function(data) {
-    super$initialize(data)
+  initialize = function(data, thresholds = NULL) {
+    super$initialize(data, thresholds)
   },
   build_fm_plot = function(d_colour) {
     g <- self$data %>%
@@ -74,16 +79,27 @@ LbsprOutputPlotter <- R6Class("LbsprOutputPlotter", inherit = AlgoOutputPlotter,
       ylab("FM") +
       theme_bw() +
       theme(legend.position = "none",
+            axis.title.x = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
             legend.key.size = unit(1.2, "lines"))
     return(g)
+  },
+  generate_outputs = function(title_size, title) {
+    spr_g <- self$build_spr_plot(d_colour = "steelblue")
+    fm_g <- self$build_fm_plot(d_colour = "orangered")
+    grid <- lbspr_plotter$build_parallell_plots(list(spr_g, fm_g),
+                                                title,
+                                                size = title_size,
+                                                just = 'centre')
+    return(grid)
   }
 
 ))
 
 LimeOutputPlotter <- R6Class("LimeOutputPlotter", inherit = AlgoOutputPlotter, public = list(
 
-  initialize = function(data) {
-    super$initialize(data)
+  initialize = function(data, thresholds = NULL) {
+    super$initialize(data, thresholds)
   },
   build_score = function(d_colour, column) {
     g <- self$data %>%
@@ -104,21 +120,11 @@ LimeOutputPlotter <- R6Class("LimeOutputPlotter", inherit = AlgoOutputPlotter, p
 
 LbiOutputPlotter <- R6Class("LbiOutputPlotter", inherit = AlgoOutputPlotter, public = list(
 
-  initialize = function(data) {
-    super$initialize(data)
+  initialize = function(data, thresholds) {
+    super$initialize(data, thresholds)
   },
-  build_lbi_tower = function(grid_title, thresholds) {
-    plots <- private$build_all_lbi_plots(self$data, thresholds)
-    tower <- ggarrange(plotlist = rev(plots),
-                       ncol = 1,
-                       nrow = length(thresholds))
-    tower_title <- build_grid_title(grid_title, size = 22)
-    return(ggarrange(
-      plotlist = list(tower_title, tower),
-      ncol = 1,
-      nrow = 2,
-      heights = c(0.5, 10)
-    ))
+  generate_outputs = function(title_size, title) {
+    private$build_lbi_tower(title_size, title)
   }
 ), private = list(
   rename_lbi_y_axis = function(name) {
@@ -180,6 +186,18 @@ LbiOutputPlotter <- R6Class("LbiOutputPlotter", inherit = AlgoOutputPlotter, pub
                                                       is_bottom = ifelse(i == 1, TRUE, FALSE))
     }
     return(plots)
+  },
+  build_lbi_tower = function(title_size, title) {
+    plots <- private$build_all_lbi_plots(self$data, self$thresholds)
+    tower <- ggarrange(plotlist = rev(plots),
+                       ncol = 1,
+                       nrow = length(self$thresholds))
+    tower_title <- build_grid_title(title, size = title_size)
+    return(ggarrange(
+      plotlist = list(tower_title, tower),
+      ncol = 1,
+      nrow = 2,
+      heights = c(0.5, 10)
+    ))
   }
-
 ))
