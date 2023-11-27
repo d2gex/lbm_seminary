@@ -1,24 +1,42 @@
-source("config.R")
-source("utils.R")
-source("plot_utils.R")
-source("lbm_data_holder.R")
-source("lbspr.R")
-source("lime.R")
-source("lbi.R")
-source("algo_plotter.R")
+source("R/config.R")
+source("R/utils.R")
+source("R/plot_utils.R")
+source("R/lbm_data_holder.R")
+source("R/lbspr.R")
+source("R/lime.R")
+source("R/lbi.R")
+source("R/algo_plotter.R")
 
 diplodus_data <- read_sheets_from_excel(FREQUENCY_DATA_PATH)
 catch_weight_data <- CatchWeightMatrices$new(catch = diplodus_data$catch,
                                              catch_long = diplodus_data$catch_long,
                                              weight = diplodus_data$weight,
                                              weight_long = diplodus_data$weight_long)
+bio_params <- BiologyParameters$new(
+  linf = 48.4,
+  k = 0.18,
+  t0 = -0.58,
+  l50 = 22.5,
+  l95 = 23.115,
+  M = 0.3105,
+  M_K = 1.725,
+  lwa = 0.021,
+  lwb = 2.955,
+  rec_variability_mean = 0.737, # Prior recruitment variability obtained from meta-analysis study
+  rec_variability_sd = 0.353 # Prior fishing penalisation obtained from meta-analysis study
+)
 
+exp_params <- ExplotationParameters$new()
 lbspr_algo <- Lbspr$new(bio_params, exp_params, catch_weight_data)
 lbspr_results <- lbspr_algo$run()
+
 exp_params$s50 <- mean(lbspr_results$estimates$SL50)
 exp_params$s95 <- mean(lbspr_results$estimates$SL95)
+exp_params$sigmaF <- 0.2
 lime_algo <- Lime$new(bio_params, exp_params, catch_weight_data)
 lime_results <- lime_algo$run()
+
+
 lbi_algo <- Lbi$new(bio_params, exp_params, catch_weight_data)
 lbi_results <- lbi_algo$run()
 

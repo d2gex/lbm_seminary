@@ -112,8 +112,21 @@ LimeOutputPlotter <- R6Class("LimeOutputPlotter", inherit = AlgoOutputPlotter, p
       ylab(column) +
       theme_bw() +
       theme(legend.position = "none",
+            axis.title.x = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
             legend.key.size = unit(1.2, "lines"))
     return(g)
+  },
+
+  generate_outputs = function(title_size, title) {
+    spr_g <- self$build_spr_plot(d_colour = "steelblue")
+    f_g <- self$build_score(d_colour = "steelblue", 'F')
+    r_g <- self$build_score(d_colour = "steelblue", 'Recruitment')
+    grid <- self$build_parallell_plots(list(spr_g, f_g, r_g),
+                                       "SPR, F and Recruitment estimates for LIME",
+                                       size = 15,
+                                       just = 'centre')
+    return(grid)
   }
 
 ))
